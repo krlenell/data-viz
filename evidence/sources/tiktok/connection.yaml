@@ -1,0 +1,4 @@
+name: tiktok
+type: duckdb
+options:
+  filename: ':memory:'
