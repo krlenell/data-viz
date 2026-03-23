@@ -1,1 +1,8 @@
 .worktrees/
+
+# Evidence build artifacts
+evidence/.evidence/
+evidence/node_modules/
+
+# Data files
+data/*.csv
