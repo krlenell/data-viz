@@ -1,1 +1,9 @@
 .worktrees/
+
+# Evidence build artifacts
+evidence/.evidence/
+evidence/node_modules/
+
+# Real data files (keep sample)
+data/*.csv
+!data/tiktok_follows_sample.csv
