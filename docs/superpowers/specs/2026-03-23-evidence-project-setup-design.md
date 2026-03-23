@@ -52,7 +52,8 @@ This pulls the official Evidence template into the `evidence/` subdirectory. We 
 ```yaml
 name: tiktok
 type: duckdb
-filename: ':memory:'
+options:
+  filename: ':memory:'
 ```
 
 Uses an in-memory DuckDB instance. The actual CSV reading happens in the SQL query file.
