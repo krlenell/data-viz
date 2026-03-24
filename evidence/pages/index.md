@@ -1,3 +1,8 @@
+---
+title: Dashboards
+sidebar_position: 0
+---
+
 # Data Dashboards
 
 Select a dashboard to view:

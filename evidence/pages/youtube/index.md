@@ -1,3 +1,8 @@
+---
+title: YouTube Campaigns
+sidebar_position: 2
+---
+
 # YouTube Video Campaigns
 
 ## Distilling Philanthropy — Campaign Performance
@@ -8,7 +13,7 @@ union all select 'Shorts'
 union all select 'Full Length'
 ```
 
-<Dropdown data={campaign_types} name=type_filter value=campaign_type defaultValue="All" title="Campaign Type" />
+<ButtonGroup data={campaign_types} name=type_filter value=campaign_type defaultValue="All" title="Campaign Type" />
 
 ```sql campaign_summary
 select

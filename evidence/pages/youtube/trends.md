@@ -1,3 +1,8 @@
+---
+title: Trends
+sidebar_position: 2
+---
+
 # Campaign Trends
 
 Compare campaign performance normalized by day of campaign run (Day 1 = launch day).
@@ -8,7 +13,7 @@ union all select 'Shorts'
 union all select 'Full Length'
 ```
 
-<Dropdown data={campaign_types} name=type_filter value=campaign_type defaultValue="All" title="Campaign Type" />
+<ButtonGroup data={campaign_types} name=type_filter value=campaign_type defaultValue="All" title="Campaign Type" />
 
 ```sql daily_by_campaign_day
 select
@@ -43,6 +48,7 @@ where '${inputs.type_filter.value}' = 'All' OR campaign_type = '${inputs.type_fi
     series=display_name
     xAxisTitle="Day of Campaign"
     yAxisTitle="Views"
+    echartsOptions={{legend: {orient: 'vertical', right: 0, top: 'middle'}, grid: {right: '25%'}}}
 />
 
 ### Cumulative Views by Campaign
@@ -54,6 +60,7 @@ where '${inputs.type_filter.value}' = 'All' OR campaign_type = '${inputs.type_fi
     series=display_name
     xAxisTitle="Day of Campaign"
     yAxisTitle="Cumulative Views"
+    echartsOptions={{legend: {orient: 'vertical', right: 0, top: 'middle'}, grid: {right: '25%'}}}
 />
 
 ### Daily CPV by Campaign
@@ -65,6 +72,7 @@ where '${inputs.type_filter.value}' = 'All' OR campaign_type = '${inputs.type_fi
     series=display_name
     xAxisTitle="Day of Campaign"
     yAxisTitle="CPV ($)"
+    echartsOptions={{legend: {orient: 'vertical', right: 0, top: 'middle'}, grid: {right: '25%'}}}
 />
 
 [← Back to Overview](/youtube)

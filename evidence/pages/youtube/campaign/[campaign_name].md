@@ -1,3 +1,7 @@
+---
+sidebar_link: false
+---
+
 # {params.campaign_name}
 
 ```sql campaign_detail
