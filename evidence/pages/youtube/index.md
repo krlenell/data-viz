@@ -17,12 +17,12 @@ union all select 'Full Length'
 
 ```sql campaign_summary
 select
-    REGEXP_REPLACE(campaign, '^\d{4}-\d{2}-\d{2}\s*-?\s*', '') as display_name,
+    REGEXP_REPLACE(campaign, '^[0-9]{4}-[0-9]{2}-[0-9]{2}[ ]*-?[ ]*', '') as display_name,
     campaign as raw_campaign,
     campaign_status as status,
     CASE
-        WHEN REGEXP_REPLACE(campaign, '^\d{4}-\d{2}-\d{2}\s*-?\s*', '') ILIKE '%Full Length%'
-          OR REGEXP_REPLACE(campaign, '^\d{4}-\d{2}-\d{2}\s*-?\s*', '') ILIKE '%Long Form%'
+        WHEN REGEXP_REPLACE(campaign, '^[0-9]{4}-[0-9]{2}-[0-9]{2}[ ]*-?[ ]*', '') ILIKE '%Full Length%'
+          OR REGEXP_REPLACE(campaign, '^[0-9]{4}-[0-9]{2}-[0-9]{2}[ ]*-?[ ]*', '') ILIKE '%Long Form%'
         THEN 'Full Length'
         ELSE 'Shorts'
     END as campaign_type,
@@ -87,7 +87,7 @@ _Avg Daily Views normalizes for different launch dates — total views divided b
 ```sql campaign_links
 select
     *,
-    '/youtube/campaign/' || display_name as campaign_link
+    '/youtube/' || display_name as campaign_link
 from ${filtered_campaigns}
 ```
 
