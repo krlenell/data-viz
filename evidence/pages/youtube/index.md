@@ -2,35 +2,56 @@
 
 ## Distilling Philanthropy — Campaign Performance
 
+```sql campaign_types
+select 'All' as campaign_type
+union all select 'Shorts'
+union all select 'Full Length'
+```
+
+<Dropdown data={campaign_types} name=type_filter value=campaign_type defaultValue="All" title="Campaign Type" />
+
 ```sql campaign_summary
 select
     TRIM(SPLIT_PART(campaign, ' - ', 2)) as display_name,
     campaign as raw_campaign,
     campaign_status as status,
+    CASE
+        WHEN TRIM(SPLIT_PART(campaign, ' - ', 2)) ILIKE '%Full Length%'
+          OR TRIM(SPLIT_PART(campaign, ' - ', 2)) ILIKE '%Long Form%'
+        THEN 'Full Length'
+        ELSE 'Shorts'
+    END as campaign_type,
     MIN(date) as launch_date,
     DATEDIFF('day', MIN(date), MAX(date)) + 1 as days_live,
+    SUM(video_trueview_views) as total_views,
+    ROUND(SUM(video_trueview_views) * 1.0 / (DATEDIFF('day', MIN(date), MAX(date)) + 1), 0) as avg_daily_views,
     SUM(impressions) as total_impressions,
-    ROUND(SUM(impressions) * 1.0 / (DATEDIFF('day', MIN(date), MAX(date)) + 1), 0) as avg_daily_impressions,
     ROUND(SUM(spend), 2) as total_spend,
-    ROUND(SUM(spend) / SUM(impressions) * 1000, 2) as avg_cpm
+    ROUND(SUM(spend) / NULLIF(SUM(video_trueview_views), 0), 4) as avg_cpv,
+    ROUND(SUM(video_trueview_views) * 1.0 / NULLIF(SUM(impressions), 0), 2) as view_rate
 from google_ads.daily_campaigns
 group by 1, 2, 3
-order by avg_daily_impressions desc
+order by avg_daily_views desc
+```
+
+```sql filtered_campaigns
+select * from ${campaign_summary}
+where '${inputs.type_filter.value}' = 'All' OR campaign_type = '${inputs.type_filter.value}'
 ```
 
 ```sql totals
 select
-    SUM(impressions) as total_impressions,
-    ROUND(SUM(spend), 2) as total_spend,
-    COUNT(DISTINCT CASE WHEN campaign_status = 'ENABLED' THEN campaign END) as campaign_count,
-    ROUND(SUM(spend) / SUM(impressions) * 1000, 2) as avg_cpm
-from google_ads.daily_campaigns
+    SUM(total_views) as total_views,
+    ROUND(SUM(total_spend), 2) as total_spend,
+    COUNT(DISTINCT CASE WHEN status = 'ENABLED' THEN raw_campaign END) as campaign_count,
+    ROUND(SUM(total_spend) / NULLIF(SUM(total_views), 0), 4) as avg_cpv
+from ${filtered_campaigns}
 ```
 
 <BigValue
     data={totals}
-    value=total_impressions
-    title="Total Impressions"
+    value=total_views
+    title="Total Views"
     fmt="#,##0"
 />
 
@@ -49,31 +70,33 @@ from google_ads.daily_campaigns
 
 <BigValue
     data={totals}
-    value=avg_cpm
-    title="Avg CPM"
-    fmt="$#,##0.00"
+    value=avg_cpv
+    title="Avg CPV"
+    fmt="$#,##0.000"
 />
 
 ### Campaign Comparison
 
-_Avg Daily Impressions normalizes for different launch dates — total impressions divided by days since campaign launch._
+_Avg Daily Views normalizes for different launch dates — total views divided by days since campaign launch._
 
 ```sql campaign_links
 select
     *,
     '/youtube/campaign/' || display_name as campaign_link
-from ${campaign_summary}
+from ${filtered_campaigns}
 ```
 
 <DataTable data={campaign_links} link=campaign_link search=true>
     <Column id=display_name title="Campaign" />
+    <Column id=campaign_type title="Type" />
     <Column id=status />
     <Column id=launch_date fmt="mmm d, yyyy" />
     <Column id=days_live title="Days Live" />
-    <Column id=total_impressions title="Total Impressions" fmt="#,##0" />
-    <Column id=avg_daily_impressions title="Avg Daily Impressions" fmt="#,##0" />
+    <Column id=total_views title="Total Views" fmt="#,##0" />
+    <Column id=avg_daily_views title="Avg Daily Views" fmt="#,##0" />
+    <Column id=view_rate title="View Rate" fmt="#,##0.0%" />
     <Column id=total_spend title="Total Spend" fmt="$#,##0.00" />
-    <Column id=avg_cpm title="Avg CPM" fmt="$#,##0.00" />
+    <Column id=avg_cpv title="Avg CPV" fmt="$#,##0.000" />
 </DataTable>
 
 [View Trends →](/youtube/trends)
