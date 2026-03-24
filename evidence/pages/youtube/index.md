@@ -41,7 +41,7 @@ order by avg_daily_views desc
 
 ```sql filtered_campaigns
 select * from ${campaign_summary}
-where '${inputs.type_filter.value}' = 'All' OR campaign_type = '${inputs.type_filter.value}'
+where '${inputs.type_filter}' = 'All' OR campaign_type = '${inputs.type_filter}'
 ```
 
 ```sql totals

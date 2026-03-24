@@ -36,7 +36,7 @@ order by campaign_day, display_name
 
 ```sql filtered_trends
 select * from ${daily_by_campaign_day}
-where '${inputs.type_filter.value}' = 'All' OR campaign_type = '${inputs.type_filter.value}'
+where '${inputs.type_filter}' = 'All' OR campaign_type = '${inputs.type_filter}'
 ```
 
 ### Daily Views by Campaign
