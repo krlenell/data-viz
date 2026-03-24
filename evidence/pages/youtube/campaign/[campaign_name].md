@@ -10,7 +10,7 @@ select
     ROUND(video_trueview_views * 1.0 / NULLIF(impressions, 0), 2) as view_rate,
     SUM(video_trueview_views) OVER (ORDER BY date) as cumulative_views
 from google_ads.daily_campaigns
-where TRIM(SPLIT_PART(campaign, ' - ', 2)) = '${params.campaign_name}'
+where REGEXP_REPLACE(campaign, '^\d{4}-\d{2}-\d{2}\s*-?\s*', '') = '${params.campaign_name}'
 order by date
 ```
 
@@ -24,7 +24,7 @@ select
     ROUND(SUM(spend) / NULLIF(SUM(video_trueview_views), 0), 4) as avg_cpv,
     ROUND(SUM(video_trueview_views) * 1.0 / NULLIF(SUM(impressions), 0), 2) as view_rate
 from google_ads.daily_campaigns
-where TRIM(SPLIT_PART(campaign, ' - ', 2)) = '${params.campaign_name}'
+where REGEXP_REPLACE(campaign, '^\d{4}-\d{2}-\d{2}\s*-?\s*', '') = '${params.campaign_name}'
 ```
 
 <BigValue data={campaign_stats} value=total_views title="Total Views" fmt="#,##0" />

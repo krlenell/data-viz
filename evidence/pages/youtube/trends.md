@@ -12,10 +12,10 @@ union all select 'Full Length'
 
 ```sql daily_by_campaign_day
 select
-    TRIM(SPLIT_PART(campaign, ' - ', 2)) as display_name,
+    REGEXP_REPLACE(campaign, '^\d{4}-\d{2}-\d{2}\s*-?\s*', '') as display_name,
     CASE
-        WHEN TRIM(SPLIT_PART(campaign, ' - ', 2)) ILIKE '%Full Length%'
-          OR TRIM(SPLIT_PART(campaign, ' - ', 2)) ILIKE '%Long Form%'
+        WHEN REGEXP_REPLACE(campaign, '^\d{4}-\d{2}-\d{2}\s*-?\s*', '') ILIKE '%Full Length%'
+          OR REGEXP_REPLACE(campaign, '^\d{4}-\d{2}-\d{2}\s*-?\s*', '') ILIKE '%Long Form%'
         THEN 'Full Length'
         ELSE 'Shorts'
     END as campaign_type,
