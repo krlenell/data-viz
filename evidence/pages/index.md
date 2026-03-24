@@ -1,7 +1,6 @@
-# TikTok Follows Dashboard
+# Data Dashboards
 
-```sql follows_summary
-select * from tiktok.follows
-```
+Select a dashboard to view:
 
-<DataTable data={follows_summary} />
+- [TikTok Follows](/tiktok) — TikTok follower tracking for Skills JAM
+- [YouTube Video Campaigns](/youtube) — Google Ads video campaign performance for Distilling Philanthropy
