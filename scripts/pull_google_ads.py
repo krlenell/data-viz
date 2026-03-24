@@ -16,6 +16,7 @@ from urllib.parse import urlencode
 from urllib.request import urlopen
 import json
 
+ENV_PATH = os.path.join(os.path.dirname(__file__), "..", ".env")
 ACCOUNT_ID = "856-857-0099"
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "google_ads_daily.csv")
 WINDSOR_API_URL = "https://connectors.windsor.ai/all"
@@ -34,7 +35,18 @@ FIELDS = [
 ]
 
 
+def _load_env():
+    if os.path.exists(ENV_PATH):
+        with open(ENV_PATH) as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    k, v = line.split("=", 1)
+                    os.environ.setdefault(k.strip(), v.strip().strip("'\""))
+
+
 def pull_data():
+    _load_env()
     api_key = os.environ.get("WINDSOR_API_KEY")
     if not api_key:
         print("Error: WINDSOR_API_KEY environment variable is not set.", file=sys.stderr)
