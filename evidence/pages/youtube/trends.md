@@ -20,7 +20,6 @@ select
     REGEXP_REPLACE(campaign, '^[0-9]{4}-[0-9]{2}-[0-9]{2}[ ]*-?[ ]*', '') as display_name,
     CASE
         WHEN REGEXP_REPLACE(campaign, '^[0-9]{4}-[0-9]{2}-[0-9]{2}[ ]*-?[ ]*', '') ILIKE '%Full Length%'
-          OR REGEXP_REPLACE(campaign, '^[0-9]{4}-[0-9]{2}-[0-9]{2}[ ]*-?[ ]*', '') ILIKE '%Long Form%'
         THEN 'Full Length'
         ELSE 'Shorts'
     END as campaign_type,
