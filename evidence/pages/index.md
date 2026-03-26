@@ -1,4 +1,7 @@
-# TikTok Follows Dashboard
+---
+title: Dashboards
+sidebar_position: 0
+---
 
 ```sql summary_stats
 select
